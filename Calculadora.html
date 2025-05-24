@@ -315,44 +315,34 @@
           <Text as="h1" variant="heading" className="mb-4">
             Histórico de Operações
           </Text>
-          {history.length > 0 ? (
-            <ul className="flex flex-col gap-3">
-              {history.map((value, index) => (
-                <Text
-                  key={`item-${index}`}
-                  as="li"
-                  className="whitespace-normal break-words"
-                  style={{ wordBreak: 'break-word' }}
-                >
-                  {value}
+          <div className="flex flex-col gap-2 max-h-[200px] overflow-y-auto">
+            {history.length === 0 ? (
+              <Text variant="muted">Nenhuma operação realizada ainda.</Text>
+            ) : (
+              history.map((item, index) => (
+                <Text key={index} variant="default" className="break-words">
+                  {item}
                 </Text>
-              ))}
-            </ul>
-          ) : (
-            <Text as="primary" variant="muted">
-              Nenhuma operação recente.
-            </Text>
-          )}
+              ))
+            )}
+          </div>
         </Card>
       );
     }
 
     function App() {
       return (
-        <main className={`
-            py-28 px-4 sm:px-10
-            flex flex-col sm:flex-row
-            items-center sm:items-stretch
-            gap-2
-            `}>
-          <CalculatorProvider>
+        <CalculatorProvider>
+          <div className="flex flex-col items-center justify-center gap-6 min-h-screen">
             <Calculator />
             <OperationHistory />
-          </CalculatorProvider>
-        </main>
+          </div>
+        </CalculatorProvider>
       );
     }
+
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
   </script>
 </body>
 
