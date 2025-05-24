@@ -117,13 +117,19 @@
 
     const buttons = [
       [
+        { input: '√', variant: 'primary' },   // raiz quadrada
+        { input: 'log', variant: 'primary' }, // logaritmo
+        { input: 'exp', variant: 'primary' }, // exponencial
+        { input: 'ln', variant: 'primary' }   // logaritmo natural
+      ],
+      [
         { input: '(', variant: 'primary' },
         { input: ')', variant: 'primary' },
         { input: '%', variant: 'primary' },
-        { input: '!', className: 'flex-1 h-16' }
+        { input: '!', variant: 'primary', className: 'flex-1 h-16' }
       ],
       [
-        { input: '√', variant: 'primary' },
+        { input: '^', variant: 'primary' },   // potência (Xⁿ)
         { input: 'CE' },
         { input: 'C', className: 'flex-1 h-16' },
         { input: '÷', variant: 'primary' }
@@ -133,8 +139,8 @@
       [{ input: '1' }, { input: '2' }, { input: '3' }, { input: '+', variant: 'primary' }],
       [
         { input: '0', className: 'flex-1 h-16' },
-        { input: '^', variant: 'primary' },
-        { input: ',' },
+        { input: 'π', variant: 'primary' },   
+        { input: ',', variant: 'primary' },
         {
           input: '=',
           className: 'w-16 h-16',
@@ -143,7 +149,6 @@
         }
       ]
     ];
-
 
     const CalculatorContext = React.createContext();
 
@@ -182,22 +187,38 @@
       const { updateHistory } = React.useContext(CalculatorContext);
 
       function doOperation(input) {
-        if (input === 'C') return setOperation(''), setResult('');
-        if (input === 'CE') return setOperation(prev => prev.slice(0, -1));
+        if (input === 'C') {
+          setOperation('');
+          setResult('');
+          return;
+        }
+
+        if (input === 'CE') {
+          setOperation(prev => prev.slice(0, -1));
+          return;
+        }
+
+        if (input === 'π') {
+          setOperation(prev => `${prev}pi`);
+          return;
+        }
 
         if (input === "=") {
           try {
             let expression = operation
-              .replace(/,/g, '.')    // Troca vírgula por ponto
-              .replace(/÷/g, '/')    // Divide
-              // Raiz genérica: √3(27) → (27)^(1/3)
-              .replace(/√([0-9]+)\(([0-9.]+)\)/g, '($2)^(1/$1)')
-              // Raiz quadrada padrão: √9 → sqrt(9)
+              .replace(/,/g, '.')
+              .replace(/÷/g, '/')
+              .replace(/×/g, '*')
+              .replace(/√([0-9.]+)\(([0-9.]+)\)/g, '($2)^(1/$1)')
+              .replace(/√\(([0-9.]+)\)/g, 'sqrt($1)')
               .replace(/√([0-9.]+)/g, 'sqrt($1)')
-              // Fatorial: 5! → factorial(5)
-              .replace(/([0-9.]+)!/g, 'factorial($1)');
+              .replace(/([0-9.]+)!/g, 'factorial($1)')
+              .replace(/log\(([0-9.]+)\)/g, 'log($1, 10)')
+              .replace(/ln\(([0-9.]+)\)/g, 'log($1)')
+              .replace(/exp\(([0-9.]+)\)/g, 'exp($1)');
 
             const evalResult = math.evaluate(expression);
+
             let parsed = parseFloat(evalResult.toFixed(9)).toString().replace('.', ',');
 
             const parts = parsed.split(',');
