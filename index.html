@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,11 +22,11 @@
       --gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(255, 255, 255, 0.05) 100%);
       --gradient-hover: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(255, 255, 255, 0.1) 100%);
       --shadow: 0px 11px 7px rgba(0, 0, 0, 0.1),
-                0px 7px 7px rgba(0, 0, 0, 0.04),
-                0px 4px 6px rgba(0, 0, 0, 0.1),
-                0px 2px 4px rgba(0, 0, 0, 0.26),
-                0px 0px 2px rgba(0, 0, 0, 0.29),
-                inset 0px 2px 3px rgba(255, 255, 255, 0.06);
+        0px 7px 7px rgba(0, 0, 0, 0.04),
+        0px 4px 6px rgba(0, 0, 0, 0.1),
+        0px 2px 4px rgba(0, 0, 0, 0.26),
+        0px 0px 2px rgba(0, 0, 0, 0.29),
+        inset 0px 2px 3px rgba(255, 255, 255, 0.06);
     }
 
     body {
@@ -75,26 +76,30 @@
     };
 
     function Button({ variant = "default", className, children, ...props }) {
+      const isPrimary = variant === "primary";
+      const isEquals = children === '=';
+
       return (
         <Text
           as="button"
           variant="heading"
-          className={`
-            flex items-center justify-center
-            p-3 cursor-pointer text-[var(--text)]
-            rounded-xl
-            hover:opacity-90
-            shadow-md
-            ${ButtonVariants[variant]}
-            ${className || ""}
-          `}
-          style={{ background: "var(--gradient)", boxShadow: "var(--shadow)" }}
+          className={`flex items-center justify-center
+      p-3 cursor-pointer text-[var(--text)]
+      rounded-xl hover:opacity-90 shadow-md
+      ${ButtonVariants[variant]}
+      ${className || ""}
+    `}
+          style={{
+            background: isEquals ? '#7F45E2' : (isPrimary ? 'var(--primary)' : 'var(--background)'),
+            boxShadow: 'var(--shadow)',
+          }}
           {...props}
         >
           {children}
         </Text>
       );
     }
+
 
     function Card({ children, className }) {
       return (
@@ -115,7 +120,7 @@
       [{ input: '7' }, { input: '8' }, { input: '9' }, { input: '*', variant: 'primary' }],
       [{ input: '4' }, { input: '5' }, { input: '6' }, { input: '-', variant: 'primary' }],
       [{ input: '1' }, { input: '2' }, { input: '3' }, { input: '+', variant: 'primary' }],
-      [{ input: '0', className: 'flex-1 h-16' }, { input: ',' }, { input: '=', className: 'w-16 h-16 bg-[#7F45E2]', variant: 'primary' }],
+      [{ input: '0', className: 'flex-1 h-16' }, { input: ',' }, { input: '=', className: 'w-16 h-16', variant: 'primary', style: { background: '#7F45E2' } }]
     ];
 
     const CalculatorContext = React.createContext();
@@ -256,4 +261,5 @@
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
+
 </html>
