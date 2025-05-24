@@ -116,12 +116,28 @@
     }
 
     const buttons = [
-      [{ input: 'CE' }, { input: 'C', className: 'flex-1 h-16' }, { input: '÷', variant: 'primary' }],
+      [
+        { input: '√', variant: 'primary' },
+        { input: 'CE' },
+        { input: 'C', className: 'flex-1 h-16' },
+        { input: '÷', variant: 'primary' }
+      ],
       [{ input: '7' }, { input: '8' }, { input: '9' }, { input: '*', variant: 'primary' }],
       [{ input: '4' }, { input: '5' }, { input: '6' }, { input: '-', variant: 'primary' }],
       [{ input: '1' }, { input: '2' }, { input: '3' }, { input: '+', variant: 'primary' }],
-      [{ input: '0', className: 'flex-1 h-16' }, { input: ',' }, { input: '=', className: 'w-16 h-16', variant: 'primary', style: { background: '#7F45E2' } }]
+      [
+        { input: '0', className: 'flex-1 h-16' },
+        { input: '^', variant: 'primary' },
+        { input: ',' },
+        {
+          input: '=',
+          className: 'w-16 h-16',
+          variant: 'primary',
+          style: { background: '#7F45E2' }
+        }
+      ]
     ];
+
 
     const CalculatorContext = React.createContext();
 
@@ -162,10 +178,17 @@
       function doOperation(input) {
         if (input === 'C') return setOperation(''), setResult('');
         if (input === 'CE') return setOperation(prev => prev.slice(0, -1));
+
         if (input === "=") {
           try {
-            const evalResult = math.evaluate(operation.replace(/,/g, '.').replace(/÷/g, '/'));
+            let expression = operation
+              .replace(/,/g, '.')   // Troca vírgula por ponto
+              .replace(/÷/g, '/')   // Divide
+              .replace(/√([0-9.]+)/g, 'sqrt($1)'); // Corrige raiz para sqrt(x)
+
+            const evalResult = math.evaluate(expression);
             let parsed = parseFloat(evalResult.toFixed(9)).toString().replace('.', ',');
+
             const parts = parsed.split(',');
             if (parts[1]) {
               const last = parts[1].slice(-5);
@@ -175,6 +198,7 @@
                 parsed = `${parts[0]},${(parts[1] + '000000000').slice(0, 9)}`;
               }
             }
+
             setResult(parsed);
             updateHistory(operation, parsed);
           } catch {
@@ -184,7 +208,7 @@
         }
 
         if (result) {
-          setOperation(isNaN(input) ? `${result}${input}` : input);
+          setOperation(isNaN(input) && input !== '√' ? `${result}${input}` : input);
           setResult('');
           return;
         }
@@ -193,6 +217,8 @@
 
         setOperation(prev => `${prev}${input}`);
       }
+
+
 
       return { operation, result, doOperation };
     }
