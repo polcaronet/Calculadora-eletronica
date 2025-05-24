@@ -138,7 +138,7 @@
         localStorage.removeItem(key);
         setHistory([]);
       }
-      
+
       function updateHistory(op, res) {
         setHistory(prev => {
           const updated = [...prev, `${op}=${res}`];
@@ -246,6 +246,7 @@
             <Text as="h1" variant="heading">Histórico de Operações</Text>
             {history.length > 0 && (
               <Button
+
                 variant="primary"
                 className="w-8 h-8 text-base"
                 onClick={clearHistory}
@@ -274,7 +275,7 @@
         </main>
       );
     }
-
+    
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
 </body>
