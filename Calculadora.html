@@ -332,17 +332,21 @@
 
     function App() {
       return (
-        <CalculatorProvider>
-          <div className="flex flex-col items-center justify-center gap-6 min-h-screen">
+        <main className={`
+            py-28 px-4 sm:px-10
+            flex flex-col sm:flex-row
+            items-center sm:items-stretch
+            gap-2
+            `}>
+          <CalculatorProvider>
             <Calculator />
             <OperationHistory />
-          </div>
-        </CalculatorProvider>
+          </CalculatorProvider>
+        </main>
       );
     }
-
+    
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-
   </script>
 </body>
 
