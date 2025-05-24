@@ -134,6 +134,11 @@
         if (saved) setHistory(JSON.parse(saved));
       }, []);
 
+      function clearHistory() {
+        localStorage.removeItem(key);
+        setHistory([]);
+      }
+      
       function updateHistory(op, res) {
         setHistory(prev => {
           const updated = [...prev, `${op}=${res}`];
@@ -143,7 +148,7 @@
       }
 
       return (
-        <CalculatorContext.Provider value={{ history, updateHistory }}>
+        <CalculatorContext.Provider value={{ history, updateHistory, clearHistory }}>
           {children}
         </CalculatorContext.Provider>
       );
@@ -234,10 +239,21 @@
     }
 
     function OperationHistory() {
-      const { history } = React.useContext(CalculatorContext);
+      const { history, clearHistory } = React.useContext(CalculatorContext);
       return (
         <Card className="w-full py-10 px-8 max-w-md">
-          <Text as="h1" variant="heading" className="mb-4">Histórico de Operações</Text>
+          <div className="flex items-center justify-between mb-4">
+            <Text as="h1" variant="heading">Histórico de Operações</Text>
+            {history.length > 0 && (
+              <Button
+                variant="primary"
+                className="w-8 h-8 text-base"
+                onClick={clearHistory}
+              >
+                🗑️
+              </Button>
+            )}
+          </div>
           <div className="flex flex-col gap-2 max-h-[200px] overflow-y-auto">
             {history.length === 0
               ? <Text variant="muted">Nenhuma operação realizada ainda.</Text>
@@ -246,6 +262,7 @@
         </Card>
       );
     }
+
 
     function App() {
       return (
