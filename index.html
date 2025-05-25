@@ -149,6 +149,7 @@
         { input: '÷', variant: 'primary' },
         { input: '+', variant: 'primary' },
         { input: '-', variant: 'primary' }
+
       ],
       [
         { input: 'C', className: 'flex-1 h-16' },
@@ -182,15 +183,11 @@
       ]
     ];
 
+
     const CalculatorContext = React.createContext();
 
     function CalculatorProvider({ children }) {
-      const [showScientific, setShowScientific] = React.useState(false);
-
-      function toggleScientific() {
-        setShowScientific(prev => !prev);
-      }
-
+    
       const [history, setHistory] = React.useState([]);
       const key = "history";
 
@@ -293,6 +290,7 @@
           return;
         }
 
+        // Se houver um resultado e o próximo input não for operador, inicia nova operação
         if (result) {
           const isOperator = /[+\-*/÷×^]/.test(input);
           const isSpecial = input === '√' || input === '!' || input === '1/x';
