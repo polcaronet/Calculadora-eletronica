@@ -149,7 +149,6 @@
         { input: '÷', variant: 'primary' },
         { input: '+', variant: 'primary' },
         { input: '-', variant: 'primary' }
-
       ],
       [
         { input: 'C', className: 'flex-1 h-16' },
@@ -182,7 +181,6 @@
         { input: '3' }
       ]
     ];
-
 
     const CalculatorContext = React.createContext();
 
@@ -295,7 +293,6 @@
           return;
         }
 
-        // Se houver um resultado e o próximo input não for operador, inicia nova operação
         if (result) {
           const isOperator = /[+\-*/÷×^]/.test(input);
           const isSpecial = input === '√' || input === '!' || input === '1/x';
