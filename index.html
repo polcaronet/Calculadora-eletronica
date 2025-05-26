@@ -215,8 +215,8 @@
     }
 
     function useCalculator() {
-      const [operation, setOperation] = React.useState("");
-      const [result, setResult] = React.useState("");
+      const [operation, setOperation] = React.useState('');
+      const [result, setResult] = React.useState('');
       const { updateHistory } = React.useContext(CalculatorContext);
 
       function doOperation(input) {
@@ -228,14 +228,11 @@
 
         if (input === 'CE') {
           if (result) {
-            // Se existe resultado, volta o resultado para operação
             setOperation(result);
             setResult('');
             return;
           }
-
           if (operation.length > 0) {
-            // Apaga o último caractere da operação
             setOperation(prev => prev.slice(0, -1));
           }
           return;
@@ -247,16 +244,16 @@
         }
 
         if (input === '℮') {
-          setOperation(prev => `${prev}e^(`);
+          setOperation(prev => `${prev}e`);
           return;
         }
 
         if (input === '1/x') {
-          setOperation(prev => `(${prev})^-1`);
+          setOperation(prev => `${prev}^-1`);
           return;
         }
 
-        if (input === "=") {
+        if (input === '=') {
           try {
             let expression = operation
               .replace(/,/g, '.')
@@ -276,7 +273,7 @@
               .replace(/cot\(([^)]+)\)/g, '1/tan($1)')
               .replace(/sec\(([^)]+)\)/g, '1/cos($1)')
               .replace(/csc\(([^)]+)\)/g, '1/sin($1)')
-              .replace(/e\^\(([^)]+)\)/g, 'exp($1)')
+              .replace(/e\^([^)]+)/g, 'exp($1)')
               .replace(/(?<![a-zA-Z0-9_])e(?![a-zA-Z0-9_])/g, `${Math.E}`);
 
             const evalResult = math.evaluate(expression);
@@ -296,7 +293,7 @@
             updateHistory(operation, parsed);
           } catch (error) {
             console.error('Erro ao calcular:', error);
-            setResult("Erro");
+            setResult('Erro');
           }
           return;
         }
@@ -321,6 +318,7 @@
 
       return { operation, result, doOperation };
     }
+
 
 
 
