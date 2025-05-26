@@ -124,7 +124,7 @@
       ],
       [
         { input: 'cot', variant: 'primary' },
-        { input: 'log', variant: 'primary' },
+        { input: '℮', variant: 'primary' },
         { input: 'sec', variant: 'primary' },
         { input: 'csc', variant: 'primary' },
       ],
@@ -147,18 +147,18 @@
         { input: '+', variant: 'primary' },
       ],
       [
-        
+
         { input: '8' },
         { input: '9' },
         { input: ',', variant: 'primary' },
-        
+
         {
           input: '=',
           className: 'w-16 h-16',
           variant: 'primary',
           style: { background: '#7F45E2' }
         },
-        
+
       ],
       [
         { input: '4' },
@@ -174,11 +174,6 @@
         { input: '3' },
       ],
     ];
-
-
-
-
-
 
 
     const CalculatorContext = React.createContext();
@@ -232,6 +227,11 @@
 
         if (input === 'π') {
           setOperation(prev => `${prev}pi`);
+          return;
+        }
+
+        if (input === '℮') {
+          setOperation(prev => `${prev}e`);
           return;
         }
 
@@ -303,6 +303,7 @@
 
       return { operation, result, doOperation };
     }
+
 
     function CalculatorDisplay({ operation, result }) {
       return (
