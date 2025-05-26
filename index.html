@@ -116,78 +116,73 @@
     }
 
     const buttons = [
-      // Funções matemáticas comuns
       [
         { input: '√', variant: 'primary' },
-        { input: 'log', variant: 'primary' },
-        { input: 'ln', variant: 'primary' },
-        { input: 'exp', variant: 'primary' }
-      ],
-      // Funções trigonométricas diretas
-      [
         { input: 'sin', variant: 'primary' },
         { input: 'cos', variant: 'primary' },
         { input: 'tan', variant: 'primary' },
-        { input: 'cot', variant: 'primary' }
-      ],
-      // Funções trigonométricas inversas e auxiliares
-      [
-        { input: 'asin', variant: 'primary' },
-        { input: 'acos', variant: 'primary' },
-        { input: 'atan', variant: 'primary' },
-        { input: 'sec', variant: 'primary' }
       ],
       [
+        { input: 'cot', variant: 'primary' },
+        { input: 'log', variant: 'primary' },
+        { input: 'sec', variant: 'primary' },
         { input: 'csc', variant: 'primary' },
+      ],
+      [
+        { input: 'ln', variant: 'primary' },
         { input: '^', variant: 'primary' },
         { input: '(', variant: 'primary' },
-        { input: ')', variant: 'primary' }
-      ],
-      // Operadores principais e controle
-      [
-        { input: '*', variant: 'primary' },
-        { input: '÷', variant: 'primary' },
-        { input: '+', variant: 'primary' },
-        { input: '-', variant: 'primary' }
-
+        { input: ')', variant: 'primary' },
       ],
       [
-        { input: 'C', className: 'flex-1 h-16' },
-        { input: 'CE' },
+        { input: '!', variant: 'primary' },
         { input: 'π', variant: 'primary' },
-        { input: '!', variant: 'primary' }
+        { input: ',', variant: 'primary' },
+        { input: 'C', className: 'w-16 h-16' },
       ],
-
       [
+        { input: '÷', variant: 'primary' },
+        { input: '*', variant: 'primary' },
+        { input: '-', variant: 'primary' },
+        { input: '+', variant: 'primary' },
+      ],
+      [
+        { input: 'CE' },
+
         { input: '8' },
         { input: '9' },
-        { input: ',', variant: 'primary' },
         {
           input: '=',
           className: 'w-16 h-16',
           variant: 'primary',
           style: { background: '#7F45E2' }
-        }
+        },
       ],
       [
         { input: '4' },
         { input: '5' },
         { input: '6' },
         { input: '7' },
+
       ],
       [
         { input: '0', className: 'flex-1 h-16' },
         { input: '1' },
         { input: '2' },
-        { input: '3' }
-      ]
+        { input: '3' },
+      ],
     ];
+
+
+
+
+
 
 
     const CalculatorContext = React.createContext();
 
     function CalculatorProvider({ children }) {
-    
+
       const [history, setHistory] = React.useState([]);
       const key = "history";
 
@@ -256,19 +251,15 @@
               .replace(/log\(([0-9.]+)\)/g, 'log($1, 10)')
               .replace(/ln\(([0-9.]+)\)/g, 'log($1)')
               .replace(/exp\(([0-9.]+)\)/g, 'exp($1)')
-
-              // Funções trigonométricas
               .replace(/sin\(([^)]+)\)/g, 'sin($1)')
               .replace(/cos\(([^)]+)\)/g, 'cos($1)')
               .replace(/tan\(([^)]+)\)/g, 'tan($1)')
-
-              // ✅ Funções arco
-              .replace(/arcsin\(([^)]+)\)/g, 'asin($1)')
-              .replace(/arccos\(([^)]+)\)/g, 'acos($1)')
-              .replace(/arctan\(([^)]+)\)/g, 'atan($1)');
+              .replace(/cotg\(([^)]+)\)/g, '1/tan($1)')
+              .replace(/cot\(([^)]+)\)/g, '1/tan($1)')
+              .replace(/sec\(([^)]+)\)/g, '1/cos($1)')
+              .replace(/csc\(([^)]+)\)/g, '1/sin($1)');
 
             const evalResult = math.evaluate(expression);
-
             let parsed = parseFloat(evalResult.toFixed(9)).toString().replace('.', ',');
 
             const parts = parsed.split(',');
@@ -290,7 +281,6 @@
           return;
         }
 
-        // Se houver um resultado e o próximo input não for operador, inicia nova operação
         if (result) {
           const isOperator = /[+\-*/÷×^]/.test(input);
           const isSpecial = input === '√' || input === '!' || input === '1/x';
@@ -311,8 +301,6 @@
 
       return { operation, result, doOperation };
     }
-
-
 
     function CalculatorDisplay({ operation, result }) {
       return (
