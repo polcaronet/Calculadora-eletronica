@@ -231,7 +231,8 @@
         }
 
         if (input === '℮') {
-          setOperation(prev => `${prev}e`);
+          // Inserir ℮ como base exponencial
+          setOperation(prev => `${prev}e^(`);
           return;
         }
 
@@ -245,21 +246,25 @@
             let expression = operation
               .replace(/,/g, '.')
               .replace(/÷/g, '/')
-              .replace(/[×хx]/g, '*') // ✅ Agora aceita ×, х e x
+              .replace(/[×хx]/g, '*')
               .replace(/√([0-9.]+)\(([0-9.]+)\)/g, '($2)^(1/$1)')
               .replace(/√\(([0-9.]+)\)/g, 'sqrt($1)')
               .replace(/√([0-9.]+)/g, 'sqrt($1)')
               .replace(/([0-9.]+)!/g, 'factorial($1)')
-              .replace(/log\(([0-9.]+)\)/g, 'log($1, 10)')
-              .replace(/ln\(([0-9.]+)\)/g, 'log($1)')
-              .replace(/exp\(([0-9.]+)\)/g, 'exp($1)')
+              .replace(/log\(([^)]+)\)/g, 'log($1, 10)')
+              .replace(/ln\(([^)]+)\)/g, 'log($1)')
+              .replace(/exp\(([^)]+)\)/g, 'exp($1)')
               .replace(/sin\(([^)]+)\)/g, 'sin($1)')
               .replace(/cos\(([^)]+)\)/g, 'cos($1)')
               .replace(/tan\(([^)]+)\)/g, 'tan($1)')
               .replace(/cotg\(([^)]+)\)/g, '1/tan($1)')
               .replace(/cot\(([^)]+)\)/g, '1/tan($1)')
               .replace(/sec\(([^)]+)\)/g, '1/cos($1)')
-              .replace(/csc\(([^)]+)\)/g, '1/sin($1)');
+              .replace(/csc\(([^)]+)\)/g, '1/sin($1)')
+              // ℮ como base exponencial
+              .replace(/e\^\(([^)]+)\)/g, 'exp($1)')
+              // ℮ como constante Euler, garantir que não está dentro de uma função
+              .replace(/(?<![a-zA-Z0-9_])e(?![a-zA-Z0-9_])/g, `${Math.E}`);
 
             const evalResult = math.evaluate(expression);
             let parsed = parseFloat(evalResult.toFixed(9)).toString().replace('.', ',');
