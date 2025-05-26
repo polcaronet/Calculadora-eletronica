@@ -193,6 +193,12 @@
         setHistory([]);
       }
 
+      function getLastHistory() {
+        if (history.length === 0) return null;
+        return history[history.length - 1];
+      }
+
+
       function updateHistory(op, res) {
         setHistory(prev => {
           const updated = [...prev, `${op}=${res}`];
@@ -202,7 +208,7 @@
       }
 
       return (
-        <CalculatorContext.Provider value={{ history, updateHistory, clearHistory }}>
+        <CalculatorContext.Provider value={{ history, updateHistory, clearHistory, getLastHistory }}>
           {children}
         </CalculatorContext.Provider>
       );
@@ -221,7 +227,17 @@
         }
 
         if (input === 'CE') {
-          setOperation(prev => prev.slice(0, -1));
+          if (result) {
+            // Se existe resultado, volta o resultado para operação
+            setOperation(result);
+            setResult('');
+            return;
+          }
+
+          if (operation.length > 0) {
+            // Apaga o último caractere da operação
+            setOperation(prev => prev.slice(0, -1));
+          }
           return;
         }
 
@@ -231,7 +247,6 @@
         }
 
         if (input === '℮') {
-          // Inserir ℮ como base exponencial
           setOperation(prev => `${prev}e^(`);
           return;
         }
@@ -261,9 +276,7 @@
               .replace(/cot\(([^)]+)\)/g, '1/tan($1)')
               .replace(/sec\(([^)]+)\)/g, '1/cos($1)')
               .replace(/csc\(([^)]+)\)/g, '1/sin($1)')
-              // ℮ como base exponencial
               .replace(/e\^\(([^)]+)\)/g, 'exp($1)')
-              // ℮ como constante Euler, garantir que não está dentro de uma função
               .replace(/(?<![a-zA-Z0-9_])e(?![a-zA-Z0-9_])/g, `${Math.E}`);
 
             const evalResult = math.evaluate(expression);
@@ -308,6 +321,7 @@
 
       return { operation, result, doOperation };
     }
+
 
 
     function CalculatorDisplay({ operation, result }) {
