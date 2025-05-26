@@ -142,7 +142,7 @@
       ],
       [
         { input: '÷', variant: 'primary' },
-        { input: '*', variant: 'primary' },
+        { input: 'х', variant: 'primary' },
         { input: '-', variant: 'primary' },
         { input: '+', variant: 'primary' },
       ],
@@ -245,7 +245,7 @@
             let expression = operation
               .replace(/,/g, '.')
               .replace(/÷/g, '/')
-              .replace(/×/g, '*')
+              .replace(/[×хx]/g, '*') // ✅ Agora aceita ×, х e x
               .replace(/√([0-9.]+)\(([0-9.]+)\)/g, '($2)^(1/$1)')
               .replace(/√\(([0-9.]+)\)/g, 'sqrt($1)')
               .replace(/√([0-9.]+)/g, 'sqrt($1)')
