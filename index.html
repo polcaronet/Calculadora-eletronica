@@ -228,13 +228,24 @@
 
         if (input === 'CE') {
           if (result) {
-            setOperation(result);
             setResult('');
             return;
           }
-          if (operation.length > 0) {
+
+          if (operation) {
             setOperation(prev => prev.slice(0, -1));
+            return;
           }
+
+          if (history.length > 0) {
+            setHistory(prev => {
+              const updated = prev.slice(0, -1);
+              localStorage.setItem('history', JSON.stringify(updated));
+              return updated;
+            });
+            return;
+          }
+
           return;
         }
 
