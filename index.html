@@ -250,7 +250,7 @@
         }
 
         if (input === 'π') {
-          setOperation(prev => `${prev}pi`);
+          setOperation(prev => `${prev}π`);
           return;
         }
 
@@ -270,6 +270,7 @@
               .replace(/,/g, '.')
               .replace(/÷/g, '/')
               .replace(/[×хx]/g, '*')
+              .replace(/(?<![a-zA-Z0-9_])π(?![a-zA-Z0-9_])/g, `${Math.PI}`)
               .replace(/√([0-9.]+)\(([0-9.]+)\)/g, '($2)^(1/$1)')
               .replace(/√\(([0-9.]+)\)/g, 'sqrt($1)')
               .replace(/√([0-9.]+)/g, 'sqrt($1)')
